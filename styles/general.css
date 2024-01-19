@@ -9,3 +9,7 @@ body {
   height: 5000px;
   font-family: Arial;
 }
+
+button {
+  cursor: pointer;
+}

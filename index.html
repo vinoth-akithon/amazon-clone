@@ -3,39 +3,137 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Amazon Project</title>
-    <link rel="stylesheet" href="styles/general.css">
-    <link rel="stylesheet" href="styles/navbar.css">
+    <title>Amazon Clone</title>
+    <link rel="stylesheet" href="styles/general.css" />
+    <link rel="stylesheet" href="styles/navbar.css" />
+    <link rel="stylesheet" href="styles/items.css" />
   </head>
   <body>
     <nav class="navbar">
       <div class="left-section">
-        <a class="header-link" >
-          <img class="amazon-mobile-logo" src="images/amazon-mobile-logo-white.png" alt="">
-          <img class="amazon-logo" src="images/amazon-logo-white.png" alt="">
+        <a class="header-link">
+          <img
+            class="amazon-mobile-logo"
+            src="images/amazon-mobile-logo-white.png"
+            alt=""
+          />
+          <img class="amazon-logo" src="images/amazon-logo-white.png" alt="" />
         </a>
       </div>
+
       <div class="middle-section">
-        <input class="search-input" type="text" placeholder="Search">
+        <input class="search-input" type="text" placeholder="Search" />
         <button class="search-icon-container">
-            <img class="search-icon" src="images/search-icon.png" alt="">
-        <button/>
+          <img class="search-icon" src="images/search-icon.png" alt="" />
+        </button>
       </div>
+
       <div class="right-section">
         <a class="orders-link header-link" href="https://google.com">
-            <div class="returns-text">Returns</div>
-            <div class="orders-text">& Orders</div>
+          <div class="returns-text">Returns</div>
+          <div class="orders-text">& Orders</div>
         </a>
         <a class="cart-link header-link" href="https://google.com">
-          <img class="cart-count-icon" src="images/cart-icon.png" alt="">
+          <img class="cart-count-icon" src="images/cart-icon.png" alt="" />
           <div class="cart-count">3</div>
           <div class="cart-text">Cart</div>
         </a>
-    </div>
+      </div>
     </nav>
-   
-    
 
-    
+    <div class="main">
+      <div class="item-card">
+        <div class="image-container">
+          <img
+            class="item-image"
+            src="images/athletic-cotton-socks-6-pairs.jpg"
+            alt=""
+          />
+        </div>
+        <div class="item-name">
+          Black and Gray Athletic Cotton Socks - 6 Pairs
+        </div>
+        <div class="item-ratings">
+          <img class="stars" src="images/rating-45.png" alt="" />
+          <span class="count">87</span>
+        </div>
+        <div class="item-price">$10.90</div>
+        <select class="item-quantity" name="item-quantity" id="">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+        </select>
+        <button class="add-to-cart-btn">Add to cart</button>
+      </div>
+
+      <div class="item-card">
+        <div class="image-container">
+          <img
+            class="item-image"
+            src="images/intermediate-composite-basketball.jpg"
+            alt=""
+          />
+        </div>
+        <div class="item-name">
+          Intermediate Size Basketball
+        </div>
+        <div class="item-ratings">
+          <img class="stars" src="images/rating-45.png" alt="" />
+          <span class="count">127</span>
+        </div>
+        <div class="item-price">$20.95</div>
+        <select class="item-quantity" name="item-quantity" id="">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+        </select>
+        <button class="add-to-cart-btn">Add to cart</button>
+      </div>
+
+      <div class="item-card">
+        <div class="image-container">
+          <img
+            class="item-image"
+            src="images/adults-plain-cotton-tshirt-2-pack-teal.jpg"
+            alt=""
+          />
+        </div>
+        <div class="item-name">
+          Adults Plain Cotton T-Shirt - 2 Pack
+        </div>
+        <div class="item-ratings">
+          <img class="stars" src="images/rating-45.png" alt="" />
+          <span class="count">56</span>
+        </div>
+        <div class="item-price">$7.99</div>
+        <select class="item-quantity" name="item-quantity" id="">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+        </select>
+        <button class="add-to-cart-btn">Add to cart</button>
+      </div>
+    </div>
   </body>
 </html>
