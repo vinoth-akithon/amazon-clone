@@ -12,7 +12,14 @@
     align-items: center;
 
     background-color: #131921;
-    padding: 0px 25px 0px 15px;
+    padding: 0px 5px 0px 5px;
+}
+
+@media screen and (min-width:576px){
+    .navbar {
+        padding: 0px 25px;
+
+    }
 }
 
 .header-link {
@@ -29,7 +36,6 @@
 }
 
 .left-section {
-    margin: 0 10px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -37,6 +43,7 @@
 
 .amazon-mobile-logo {
     width: 35px;
+    margin-top: 5px;
 }
 
 .amazon-logo {
@@ -51,7 +58,7 @@
     .amazon-logo {
         display: block;
         width: 100px;
-        margin-top: 5px;
+        margin-top: 10px;
     }
 
 }
@@ -81,6 +88,7 @@
 
 .search-input:focus {
     outline: none;
+    border: 3px solid #F8B967;
 }
 
 .search-icon-container {
