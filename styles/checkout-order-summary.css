@@ -1,0 +1,56 @@
+.order-summary-container {
+  border: 1px solid rgb(210, 210, 210);
+  padding: 20px;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+
+@media screen and (min-width:1000px) {
+  .order-summary-container {
+      grid-column: 2;
+  }
+}
+
+.order-summary-container .heading {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.order-summary-flex {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.order-summary-total {
+  color: #b12704;
+  font-weight: 700;
+  font-size: 18px;
+  padding: 20px 0;
+  border-top: 1px solid rgb(210, 210, 210);
+}
+
+.place-order-btn {
+  background-color: rgb(252, 210, 0);
+  width: 100%;
+  padding: 12px 0;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.place-order-btn:hover {
+  background-color: #f7ca00;
+}
+
+.before-tax-price {
+  border-top: 1px solid rgb(210, 210, 210);
+  padding-top: 10px;
+}
+
+.before-tax-text {
+  padding-top: 10px;
+}

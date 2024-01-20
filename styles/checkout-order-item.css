@@ -1,0 +1,97 @@
+.order-item-container {
+    border: 1px solid rgb(210, 210, 210);
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 12px;
+}
+
+.order-item-delivery-date {
+    font-weight: 700;
+    font-size: 20px;
+    color: #007600;
+    margin-bottom: 20px;
+}
+
+.order-item-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+@media screen and (min-width: 1000px) {
+    .order-item-grid {
+        grid-template-columns: 1.5fr 1fr;
+        align-items: start;
+        gap: 20px
+    }
+}
+
+.product-details-container {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.product-image {
+    width: 100px;
+}
+
+.product-name {
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.product-price {
+    font-weight: 700;
+    color: #b12704;
+    margin-bottom: 8px;
+}
+
+.product-quantity {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.product-quantity button {
+    background-color: #fff;
+    font-size: 15px;
+    color: #017CB6;
+}
+
+.product-quantity button:hover {
+    color: #C45000;
+}
+
+.delivery-option-description {
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.delivery-option {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.delivery-option input {
+    width: 20px
+}
+
+.delivery-option-date {
+    color: #007600;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.delivery-option-desc {
+    color: gray
+}
+
+.delivery-option label,
+.delivery-option input{
+    cursor: pointer;
+}
