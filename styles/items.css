@@ -94,8 +94,29 @@
     border: 2px solid #dbb303; 
 }
 
+.added-to-cart {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 15px;
+    visibility: hidden;
+}
+
+.added-to-cart-visible {
+    visibility: visible;
+}
+
+.checkmark {
+    width: 20px;
+}
+
+.checkmark-content {
+    margin-left: 5px;
+    color: #067D62
+}
+
 .add-to-cart-btn {
-    margin-top: 40px;
+    margin-top: 10px;
     background-color: rgb(255, 216, 20);
     padding: 10px 0px 10px 0px;
     border-radius: 30px;

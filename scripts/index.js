@@ -21,7 +21,9 @@ products.forEach((product) => {
         <div class="item-price">$${(product.priceInCents / 100).toFixed(
           2
         )}</div>
-        <select class="item-quantity" name="item-quantity" id="">
+        <select class="item-quantity js-quantity-selector-${
+          product.id
+        }" name="item-quantity" id="">
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -33,6 +35,10 @@ products.forEach((product) => {
           <option value="9">9</option>
           <option value="10">10</option>
         </select>
+        <div class="added-to-cart js-added-to-cart-${product.id}">
+          <img class="checkmark" src="images/checkmark.png">
+          <div class="checkmark-content">Added</div>
+        </div>
         <button data-product-id="${
           product.id
         }" class="add-to-cart-btn">Add to cart</button>
@@ -44,31 +50,50 @@ const mainContainerElement = document.querySelector(".main");
 mainContainerElement.innerHTML = generatedHTML;
 
 document.querySelectorAll(".add-to-cart-btn").forEach((button) => {
+  let addedMessageTimeoutId;
   button.addEventListener("click", () => {
-    const product = button.dataset;
-    let alreadyPresentProduct;
+    const { productId } = button.dataset;
+    let alreadyPresentInCart;
+
+    const addedConfirmationElement = document.querySelector(
+      `.js-added-to-cart-${productId}`
+    );
+    addedConfirmationElement.classList.add("added-to-cart-visible");
+
+    if (addedMessageTimeoutId) {
+      clearTimeout(addedMessageTimeoutId);
+    }
+
+    const timeoutId = setTimeout(() => {
+      addedConfirmationElement.classList.remove("added-to-cart-visible");
+    }, 2000);
+    addedMessageTimeoutId = timeoutId;
 
     cart.forEach((cartItem) => {
-      if (cartItem.productId === product.productId) {
-        alreadyPresentProduct = cartItem;
+      if (cartItem.productId === productId) {
+        alreadyPresentInCart = cartItem;
       }
     });
 
-    if (alreadyPresentProduct) {
-      alreadyPresentProduct.quantity++;
+    const quantityElement = document.querySelector(
+      `.js-quantity-selector-${productId}`
+    );
+    const quantity = Number(quantityElement.value);
+
+    if (alreadyPresentInCart) {
+      alreadyPresentInCart.quantity += quantity;
     } else {
       cart.push({
-        productId: product.productId,
-        quantity: 1,
+        productId,
+        quantity,
       });
     }
 
     let totalCartQuantity = 0;
     cart.forEach((cartItem) => {
-        totalCartQuantity += cartItem.quantity;
-    })
+      totalCartQuantity += cartItem.quantity;
+    });
     const totalCartQuantityElement = document.querySelector(".cart-count");
     totalCartQuantityElement.innerHTML = totalCartQuantity;
-
   });
 });
