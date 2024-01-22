@@ -1,5 +1,6 @@
-import { cart } from "../data/cart.js";
+import { cart, addToCart } from "../data/cart.js";
 import { products } from "../data/products.js";
+import { currencyFormater } from "./utils/currency.js";
 
 let generatedHTML = "";
 products.forEach((product) => {
@@ -21,9 +22,7 @@ products.forEach((product) => {
           }.png" alt="" />
           <span class="count">${product.rating.count}</span>
         </div>
-        <div class="item-price">$${(product.priceInCents / 100).toFixed(
-          2
-        )}</div>
+        <div class="item-price">$${currencyFormater(product.priceInCents)}</div>
         <select class="item-quantity js-quantity-selector-${
           product.id
         }" name="item-quantity" id="">
@@ -51,6 +50,7 @@ products.forEach((product) => {
 
 const mainContainerElement = document.querySelector(".main");
 mainContainerElement.innerHTML = generatedHTML;
+updateCartQuantity();
 
 function enableConfirmation(addedMessageTimeoutId, productId) {
   const addedConfirmationElement = document.querySelector(
@@ -68,27 +68,11 @@ function enableConfirmation(addedMessageTimeoutId, productId) {
   return timeoutId;
 }
 
-function addToCart(productId) {
-  let alreadyPresentedItem;
+function getQuantityFromDropDown(productId) {
   const quantityElement = document.querySelector(
     `.js-quantity-selector-${productId}`
   );
-  const quantity = Number(quantityElement.value);
-
-  cart.forEach((cartItem) => {
-    if (cartItem.productId === productId) {
-      alreadyPresentedItem = cartItem;
-    }
-  });
-
-  if (alreadyPresentedItem) {
-    alreadyPresentedItem.quantity += quantity;
-  } else {
-    cart.push({
-      productId,
-      quantity,
-    });
-  }
+  return Number(quantityElement.value);
 }
 
 function updateCartQuantity() {
@@ -103,8 +87,9 @@ document.querySelectorAll(".add-to-cart-btn").forEach((button) => {
   let addedMessageTimeoutId;
   button.addEventListener("click", () => {
     const { productId } = button.dataset;
-    
-    addToCart(productId);
+    const quantity = getQuantityFromDropDown(productId);
+
+    addToCart(productId, quantity);
     updateCartQuantity();
     addedMessageTimeoutId = enableConfirmation(
       addedMessageTimeoutId,
