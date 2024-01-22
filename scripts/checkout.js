@@ -48,11 +48,12 @@ cart.forEach((cartItem) => {
                     <button data-product-id="${
                       matchedProduct.id
                     }" class="update-quantity-btn">Update</button>
-                    <input min="1" max="999" value="${
-                      cartItem.quantity
-                    }" class="update-quantity-input update-quantity-input-${
-    matchedProduct.id
-  }" type="number">
+                    <input min="1" max="999" 
+                      data-product-id="${matchedProduct.id}"
+                      value="${cartItem.quantity}" 
+                      class="update-quantity-input update-quantity-input-${
+                        matchedProduct.id
+                      }" type="number">
                     <button class="update-quantity-save-btn" data-product-id="${
                       matchedProduct.id
                     }">Save</button>
@@ -132,32 +133,48 @@ updateBtnElements.forEach((updateBtn) => {
   });
 });
 
+function saveQuantity(productId) {
+  const inputQuantityElement = document.querySelector(
+    `.update-quantity-input-${productId}`
+  );
+  const quantity = Number(inputQuantityElement.value);
+  if (quantity < 1 || quantity >= 1000) {
+    alert("quantity must be atleast 1 and less than 1000");
+    return;
+  }
+
+  const itemContainer = document.querySelector(
+    `.order-item-container-${productId}`
+  );
+  itemContainer.classList.remove("is-editing-quantity");
+
+  updateQuantity(productId, quantity);
+
+  const itemQuantityCount = document.querySelector(
+    `.quantity-label-${productId}`
+  );
+  itemQuantityCount.innerHTML = quantity;
+
+  updateCartQuantity();
+}
+
 const saveBtnElement = document.querySelectorAll(".update-quantity-save-btn");
 saveBtnElement.forEach((saveBtn) => {
   saveBtn.addEventListener("click", () => {
     const { productId } = saveBtn.dataset;
 
-    const inputQuantityElement = document.querySelector(
-      `.update-quantity-input-${productId}`
-    );
-    const quantity = Number(inputQuantityElement.value);
-    if (quantity < 1 || quantity >= 1000) {
-      alert("quantity must be atleast 1 and less than 1000");
-      return
+    saveQuantity(productId);
+  });
+});
+
+const quantityInputElements = document.querySelectorAll(
+  ".update-quantity-input"
+);
+quantityInputElements.forEach((quantityInput) => {
+  quantityInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      const { productId } = quantityInput.dataset;
+      saveQuantity(productId);
     }
-
-    const itemContainer = document.querySelector(
-      `.order-item-container-${productId}`
-    );
-    itemContainer.classList.remove("is-editing-quantity");
-
-    updateQuantity(productId, quantity);
-
-    const itemQuantityCount = document.querySelector(
-      `.quantity-label-${productId}`
-    );
-    itemQuantityCount.innerHTML = quantity;
-
-    updateCartQuantity();
   });
 });
