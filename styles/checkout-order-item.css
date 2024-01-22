@@ -65,18 +65,20 @@
   color: #c45000;
 }
 
-.update-quantity-btn-hidden {
+.update-quantity-input,
+.update-quantity-save-btn {
   display: none;
 }
 
-.update-quantity-container {
-  display: none;
+.is-editing-quantity .update-quantity-input,
+.is-editing-quantity .update-quantity-save-btn {
+  display: initial;
 }
 
-.update-quantity-container-visible {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
+
+.is-editing-quantity .update-quantity-btn,
+.is-editing-quantity .quantity-label {
+  display: none;
 }
 
 .update-quantity-input {

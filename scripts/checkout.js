@@ -42,23 +42,20 @@ cart.forEach((cartItem) => {
                   matchedProduct.priceInCents
                 )}</div>
                 <div class="product-quantity">
-                    <div class="item-quantity-count-${matchedProduct.id}">Quantity: ${cartItem.quantity}</div>
+                    <div>Quantity: <span class="quantity-label-${
+                      matchedProduct.id
+                    } quantity-label">${cartItem.quantity}</span></div>
                     <button data-product-id="${
                       matchedProduct.id
-                    }" class="update-quantity-btn update-quantity-btn-${matchedProduct.id}">Update</button>
-                    <div class="update-quantity-container update-quantity-container-${
-                      matchedProduct.id
-                    }">
-                      <input value="${
-                        cartItem.quantity
-                      }" class="update-quantity-input update-quantity-input-${
+                    }" class="update-quantity-btn">Update</button>
+                    <input min="1" max="999" value="${
+                      cartItem.quantity
+                    }" class="update-quantity-input update-quantity-input-${
     matchedProduct.id
   }" type="number">
-                      <button class="update-quantity-save-btn" data-product-id="${
-                        matchedProduct.id
-                      }">Save</button> 
-                    </div>
-            
+                    <button class="update-quantity-save-btn" data-product-id="${
+                      matchedProduct.id
+                    }">Save</button>
                     <button data-product-id="${
                       matchedProduct.id
                     }" class="delete-quantity-btn">Delete</button>
@@ -127,11 +124,11 @@ const updateBtnElements = document.querySelectorAll(".update-quantity-btn");
 updateBtnElements.forEach((updateBtn) => {
   updateBtn.addEventListener("click", () => {
     const { productId } = updateBtn.dataset;
-    const updateContainer = document.querySelector(
-      `.update-quantity-container-${productId}`
+
+    const itemContainer = document.querySelector(
+      `.order-item-container-${productId}`
     );
-    updateContainer.classList.add("update-quantity-container-visible");
-    updateBtn.classList.add("update-quantity-btn-hidden");
+    itemContainer.classList.add("is-editing-quantity");
   });
 });
 
@@ -139,19 +136,27 @@ const saveBtnElement = document.querySelectorAll(".update-quantity-save-btn");
 saveBtnElement.forEach((saveBtn) => {
   saveBtn.addEventListener("click", () => {
     const { productId } = saveBtn.dataset;
-    
-    const updateContainer = document.querySelector(`.update-quantity-container-${productId}`);
-    updateContainer.classList.remove("update-quantity-container-visible");
-    
-    const updateBtn = document.querySelector(`.update-quantity-btn-${productId}`)
-    updateBtn.classList.remove("update-quantity-btn-hidden");
-    
-    const inputQuantityElement = document.querySelector(`.update-quantity-input-${productId}`);
+
+    const inputQuantityElement = document.querySelector(
+      `.update-quantity-input-${productId}`
+    );
     const quantity = Number(inputQuantityElement.value);
+    if (quantity < 1 || quantity >= 1000) {
+      alert("quantity must be atleast 1 and less than 1000");
+      return
+    }
+
+    const itemContainer = document.querySelector(
+      `.order-item-container-${productId}`
+    );
+    itemContainer.classList.remove("is-editing-quantity");
+
     updateQuantity(productId, quantity);
 
-    const itemQuantityCount = document.querySelector(`.item-quantity-count-${productId}`)
-    itemQuantityCount.innerHTML = `Quantity: ${quantity}`
+    const itemQuantityCount = document.querySelector(
+      `.quantity-label-${productId}`
+    );
+    itemQuantityCount.innerHTML = quantity;
 
     updateCartQuantity();
   });
