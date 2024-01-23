@@ -1,4 +1,4 @@
-export let cart = loadCartfromLocalStorage()
+export let cart = loadCartfromLocalStorage();
 
 export function addToCart(productId, quantity) {
   let alreadyPresentedItem;
@@ -15,7 +15,7 @@ export function addToCart(productId, quantity) {
     cart.push({
       productId,
       quantity,
-      deliveryOptionId: "1"
+      deliveryOptionId: "1",
     });
   }
 
@@ -23,7 +23,7 @@ export function addToCart(productId, quantity) {
 }
 
 export function updateQuantity(productId, quantity) {
-  const cartItem = cart.find((cartItem) => cartItem.productId === productId)
+  const cartItem = cart.find((cartItem) => cartItem.productId === productId);
   cartItem.quantity = quantity;
   saveCartToLocalStorage();
 }
@@ -33,13 +33,12 @@ export function removeFromCart(productId) {
   saveCartToLocalStorage();
 }
 
-
 function saveCartToLocalStorage() {
-  localStorage.setItem("amazon-cart", JSON.stringify(cart))
+  localStorage.setItem("amazon-cart", JSON.stringify(cart));
 }
 
 function loadCartfromLocalStorage() {
-  return JSON.parse(localStorage.getItem("amazon-cart")) || []
+  return JSON.parse(localStorage.getItem("amazon-cart")) || [];
 }
 
 export function getTotalQuantity() {
@@ -47,5 +46,13 @@ export function getTotalQuantity() {
   cart.forEach((cartItem) => {
     totalCartQuantity += cartItem.quantity;
   });
-  return totalCartQuantity
+  return totalCartQuantity;
+}
+
+export function updateDeliveryOption(productId, deliveryOptionId) {
+  const matchedCartItem = cart.find((cartItem) => {
+    return cartItem.productId === productId;
+  });
+  matchedCartItem.deliveryOptionId = deliveryOptionId;
+  saveCartToLocalStorage();
 }
