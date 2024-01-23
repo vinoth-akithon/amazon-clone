@@ -1,37 +1,33 @@
-import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 import { currencyFormater } from "../utils/currency.js";
 import { getProduct } from "../../data/products.js";
-import { getDeliveryOption, deliveryOptions } from "../../data/deliveryOptions.js";
+import { renderPaymentSummary } from "./paymentSummary.js";
+import { renderCheckoutHeader } from "./checkoutHeader.js";
+import {
+  getDeliveryOption,
+  deliveryOptions,
+  calculateDeliveryDate,
+} from "../../data/deliveryOptions.js";
 import {
   cart,
   removeFromCart,
-  getTotalQuantity,
   updateQuantity,
   updateDeliveryOption,
 } from "../../data/cart.js";
-import { renderPaymentSummary } from "./paymentSummary.js";
-
 
 export function renderOrderSummary() {
-  function updateCartQuantity() {
-    document.querySelector(".total-quantity").innerHTML = getTotalQuantity();
-  }
-
-  updateCartQuantity();
-
   let orderItemSection = "";
 
   cart.forEach((cartItem) => {
     const matchedProduct = getProduct(cartItem.productId);
 
-    const deliveryOption = getDeliveryOption(cartItem.deliveryOptionId)
-    
+    const deliveryOption = getDeliveryOption(cartItem.deliveryOptionId);
+
     orderItemSection += `
       <div class="order-item-container order-item-container-${
         matchedProduct.id
       }">
         <div class="order-item-delivery-date">
-          Delivery date: ${generateDate(deliveryOption.deliveryDays)}
+          Delivery date: ${calculateDeliveryDate(deliveryOption.deliveryDays)}
         </div>
         <div class="order-item-grid">
           <div class="product-details-container">
@@ -82,17 +78,11 @@ export function renderOrderSummary() {
     `;
   });
 
-  function generateDate(days) {
-    const todayDate = dayjs();
-    const deliverDate = todayDate.add(days, "days");
-    return deliverDate.format("dddd, MMMM D");
-  }
-
   function deliveryOptionsHTML(matchedProduct, deliveryOption) {
     let html = "";
     deliveryOptions.forEach((option) => {
       const { id: optionId, deliveryDays, priceInCents } = option;
-      const dateString = generateDate(deliveryDays);
+      const dateString = calculateDeliveryDate(deliveryDays);
       const priceString = priceInCents
         ? `$${currencyFormater(priceInCents)} -`
         : "FREE";
@@ -127,9 +117,9 @@ export function renderOrderSummary() {
 
       removeFromCart(productId);
 
+      renderCheckoutHeader();
       renderOrderSummary();
       renderPaymentSummary();
-
     });
   });
 
@@ -155,22 +145,11 @@ export function renderOrderSummary() {
       return;
     }
 
-    // const itemContainer = document.querySelector(
-    //   `.order-item-container-${productId}`
-    // );
-    // itemContainer.classList.remove("is-editing-quantity");
-
     updateQuantity(productId, quantity);
 
-    // const itemQuantityCount = document.querySelector(
-    //   `.quantity-label-${productId}`
-    // );
-    // itemQuantityCount.innerHTML = quantity;
-
-    // updateCartQuantity();
+    renderCheckoutHeader();
     renderOrderSummary();
     renderPaymentSummary();
-
   }
 
   const saveBtnElement = document.querySelectorAll(".update-quantity-save-btn");
@@ -201,9 +180,9 @@ export function renderOrderSummary() {
     element.addEventListener("click", () => {
       const { productId, optionId } = element.dataset;
       updateDeliveryOption(productId, optionId);
+
       renderOrderSummary();
       renderPaymentSummary();
     });
   });
 }
-
