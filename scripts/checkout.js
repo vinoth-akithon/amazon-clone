@@ -6,6 +6,9 @@ import {
 } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { currencyFormater } from "./utils/currency.js";
+import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
+import deliveryOptions from "../data/deliveryOptions.js";
+
 
 function updateCartQuantity() {
   document.querySelector(".total-quantity").innerHTML = getTotalQuantity();
@@ -19,86 +22,88 @@ cart.forEach((cartItem) => {
   const matchedProduct = products.find(
     (product) => product.id === cartItem.productId
   );
+  
+  const deliveryOptionObj = deliveryOptions.find((option) => {
+    return option.id === cartItem.deliveryOptionId
+  })
 
   orderItemSection += `
-        <div class="order-item-container order-item-container-${
-          matchedProduct.id
-        }">
-            <div class="order-item-delivery-date">
-            Delivery date: Tuesday, June 21
+    <div class="order-item-container order-item-container-${matchedProduct.id}">
+      <div class="order-item-delivery-date">
+        Delivery date: ${generateDate(deliveryOptionObj.deliveryDays)}
+      </div>
+      <div class="order-item-grid">
+        <div class="product-details-container">
+            <img
+            class="product-image"
+            src="${matchedProduct.image}"
+            alt=""
+            />
+            <div class="product-details">
+            <div class="product-name">
+                ${matchedProduct.name}
             </div>
-            <div class="order-item-grid">
-            <div class="product-details-container">
-                <img
-                class="product-image"
-                src="${matchedProduct.image}"
-                alt=""
-                />
-                <div class="product-details">
-                <div class="product-name">
-                    ${matchedProduct.name}
-                </div>
-                <div class="product-price">$${currencyFormater(
-                  matchedProduct.priceInCents
-                )}</div>
-                <div class="product-quantity">
-                    <div>Quantity: <span class="quantity-label-${
-                      matchedProduct.id
-                    } quantity-label">${cartItem.quantity}</span></div>
-                    <button data-product-id="${
-                      matchedProduct.id
-                    }" class="update-quantity-btn">Update</button>
-                    <input min="1" max="999" 
-                      data-product-id="${matchedProduct.id}"
-                      value="${cartItem.quantity}" 
-                      class="update-quantity-input update-quantity-input-${
-                        matchedProduct.id
-                      }" type="number">
-                    <button class="update-quantity-save-btn" data-product-id="${
-                      matchedProduct.id
-                    }">Save</button>
-                    <button data-product-id="${
-                      matchedProduct.id
-                    }" class="delete-quantity-btn">Delete</button>
-                </div>
-                </div>
-            </div>
-            <div class="delivery-option-container">
-                <div class="delivery-option-description">
-                Choose a delivery option:
-                </div>
-                <div class="delivery-option">
-                <input type="radio" checked name="${matchedProduct.id}" id="${
-    matchedProduct.id
-  }-free" />
-                <label for="${matchedProduct.id}-free">
-                    <div class="delivery-option-date">Tuesday, June 21</div>
-                    <div class="delivery-option-desc">FREE Shipping</div>
-                </label>
-                </div>
-                <div class="delivery-option">
-                <input type="radio" name="${matchedProduct.id}" id="${
-    matchedProduct.id
-  }-4.99" />
-                <label for="${matchedProduct.id}-4.99">
-                    <div class="delivery-option-date">Wednesday, June 15</div>
-                    <div class="delivery-option-desc">$4.99 Shipping</div>
-                </label>
-                </div>
-                <div class="delivery-option">
-                <input type="radio" name="${matchedProduct.id}" id="${
-    matchedProduct.id
-  }-9.99" />
-                <label for="${matchedProduct.id}-9.99">
-                    <div class="delivery-option-date">Monday, June 13</div>
-                    <div class="delivery-option-desc">$9.99 Shipping</div>
-                </label>
-                </div>
+            <div class="product-price">$${currencyFormater(
+              matchedProduct.priceInCents
+            )}</div>
+            <div class="product-quantity">
+                <div>Quantity: <span class="quantity-label-${
+                  matchedProduct.id
+                } quantity-label">${cartItem.quantity}</span></div>
+                <button data-product-id="${
+                  matchedProduct.id
+                }" class="update-quantity-btn">Update</button>
+                <input min="1" max="999" 
+                  data-product-id="${matchedProduct.id}"
+                  value="${cartItem.quantity}" 
+                  class="update-quantity-input update-quantity-input-${
+                    matchedProduct.id
+                  }" type="number">
+                <button class="update-quantity-save-btn" data-product-id="${
+                  matchedProduct.id
+                }">Save</button>
+                <button data-product-id="${
+                  matchedProduct.id
+                }" class="delete-quantity-btn">Delete</button>
             </div>
             </div>
         </div>
-        `;
+        <div class="delivery-option-container">
+          <div class="delivery-option-description">
+            Choose a delivery option:
+          </div>
+          <div class="delivery-options">
+            ${deliveryOptionsHTML(matchedProduct, deliveryOptionObj)}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
 });
+
+function generateDate(days) {
+  const todayDate = dayjs()
+  const deliverDate = todayDate.add(days, "days")
+  return deliverDate.format("dddd, MMMM D") 
+}
+
+function deliveryOptionsHTML(matchedProduct, deliveryOptionObj) {
+  let html = "";
+  deliveryOptions.forEach((option) => {
+    const {id:optionId, deliveryDays, priceInCents} = option;
+    const dateString = generateDate(deliveryDays);
+    const priceString = priceInCents ? `$${currencyFormater(priceInCents)} -` : "FREE"
+
+    html += `<div class="delivery-option">
+              <input ${deliveryOptionObj.id === optionId && "checked"} type="radio" name="${matchedProduct.id}" id="${matchedProduct.id}-${optionId}" />
+              <label for="${matchedProduct.id}-${optionId}">
+                <div class="delivery-option-date">${dateString}</div>
+                <div class="delivery-option-desc">${priceString} Shipping</div>
+              </label>
+            </div>`
+  })
+  return html
+}
 
 const orederItemSectionElement = document.querySelector(
   ".order-summery-section"
