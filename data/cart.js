@@ -22,8 +22,12 @@ export function addToCart(productId, quantity) {
   saveCartToLocalStorage();
 }
 
+function getCartItem(productId) {
+  return cart.find((cartItem) => cartItem.productId === productId);
+}
+
 export function updateQuantity(productId, quantity) {
-  const cartItem = cart.find((cartItem) => cartItem.productId === productId);
+  const cartItem = getCartItem(productId);
   cartItem.quantity = quantity;
   saveCartToLocalStorage();
 }
@@ -50,9 +54,7 @@ export function getTotalQuantity() {
 }
 
 export function updateDeliveryOption(productId, deliveryOptionId) {
-  const matchedCartItem = cart.find((cartItem) => {
-    return cartItem.productId === productId;
-  });
+  const matchedCartItem = getCartItem(productId);
   matchedCartItem.deliveryOptionId = deliveryOptionId;
   saveCartToLocalStorage();
 }

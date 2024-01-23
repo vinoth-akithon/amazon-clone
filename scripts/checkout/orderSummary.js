@@ -1,7 +1,7 @@
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 import { currencyFormater } from "../utils/currency.js";
-import { products } from "../../data/products.js";
-import deliveryOptions from "../../data/deliveryOptions.js";
+import { products, getProduct } from "../../data/products.js";
+import { getDeliveryOption, deliveryOptions } from "../../data/deliveryOptions.js";
 import {
   cart,
   removeFromCart,
@@ -9,6 +9,7 @@ import {
   updateQuantity,
   updateDeliveryOption,
 } from "../../data/cart.js";
+import { renderPaymentSummary } from "./paymentSummary.js";
 
 
 export function renderOrderSummary() {
@@ -21,20 +22,16 @@ export function renderOrderSummary() {
   let orderItemSection = "";
 
   cart.forEach((cartItem) => {
-    const matchedProduct = products.find(
-      (product) => product.id === cartItem.productId
-    );
+    const matchedProduct = getProduct(cartItem.productId);
 
-    const deliveryOptionObj = deliveryOptions.find((option) => {
-      return option.id === cartItem.deliveryOptionId;
-    });
-
+    const deliveryOption = getDeliveryOption(cartItem.deliveryOptionId)
+    
     orderItemSection += `
       <div class="order-item-container order-item-container-${
         matchedProduct.id
       }">
         <div class="order-item-delivery-date">
-          Delivery date: ${generateDate(deliveryOptionObj.deliveryDays)}
+          Delivery date: ${generateDate(deliveryOption.deliveryDays)}
         </div>
         <div class="order-item-grid">
           <div class="product-details-container">
@@ -77,7 +74,7 @@ export function renderOrderSummary() {
               Choose a delivery option:
             </div>
             <div class="delivery-options">
-              ${deliveryOptionsHTML(matchedProduct, deliveryOptionObj)}
+              ${deliveryOptionsHTML(matchedProduct, deliveryOption)}
             </div>
           </div>
         </div>
@@ -91,7 +88,7 @@ export function renderOrderSummary() {
     return deliverDate.format("dddd, MMMM D");
   }
 
-  function deliveryOptionsHTML(matchedProduct, deliveryOptionObj) {
+  function deliveryOptionsHTML(matchedProduct, deliveryOption) {
     let html = "";
     deliveryOptions.forEach((option) => {
       const { id: optionId, deliveryDays, priceInCents } = option;
@@ -102,7 +99,7 @@ export function renderOrderSummary() {
 
       html += `<div class="delivery-option">
                 <input class="delivery-option-btn" ${
-                  deliveryOptionObj.id === optionId && "checked"
+                  deliveryOption.id === optionId && "checked"
                 } 
                   data-product-id="${matchedProduct.id}"
                   data-option-id="${optionId}"
@@ -128,14 +125,11 @@ export function renderOrderSummary() {
     deleteBtn.addEventListener("click", () => {
       const { productId } = deleteBtn.dataset;
 
-      const itemContainer = document.querySelector(
-        `.order-item-container-${productId}`
-      );
-      itemContainer.remove();
-
       removeFromCart(productId);
 
-      updateCartQuantity();
+      renderOrderSummary();
+      renderPaymentSummary();
+
     });
   });
 
@@ -161,19 +155,22 @@ export function renderOrderSummary() {
       return;
     }
 
-    const itemContainer = document.querySelector(
-      `.order-item-container-${productId}`
-    );
-    itemContainer.classList.remove("is-editing-quantity");
+    // const itemContainer = document.querySelector(
+    //   `.order-item-container-${productId}`
+    // );
+    // itemContainer.classList.remove("is-editing-quantity");
 
     updateQuantity(productId, quantity);
 
-    const itemQuantityCount = document.querySelector(
-      `.quantity-label-${productId}`
-    );
-    itemQuantityCount.innerHTML = quantity;
+    // const itemQuantityCount = document.querySelector(
+    //   `.quantity-label-${productId}`
+    // );
+    // itemQuantityCount.innerHTML = quantity;
 
-    updateCartQuantity();
+    // updateCartQuantity();
+    renderOrderSummary();
+    renderPaymentSummary();
+
   }
 
   const saveBtnElement = document.querySelectorAll(".update-quantity-save-btn");
@@ -205,6 +202,7 @@ export function renderOrderSummary() {
       const { productId, optionId } = element.dataset;
       updateDeliveryOption(productId, optionId);
       renderOrderSummary();
+      renderPaymentSummary();
     });
   });
 }
