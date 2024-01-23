@@ -1,6 +1,6 @@
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 import { currencyFormater } from "../utils/currency.js";
-import { products, getProduct } from "../../data/products.js";
+import { getProduct } from "../../data/products.js";
 import { getDeliveryOption, deliveryOptions } from "../../data/deliveryOptions.js";
 import {
   cart,
